@@ -66,3 +66,16 @@ def getJsonWebToken(privateKey) {
         error "Failed to create a JWT"
     }
 }
+
+
+def validateAuth(jsonWebToken) {
+    try {
+        def httpConn = new URL("https://api.github.com/app").openConnection();
+        httpConn.setRequestProperty( 'Authorization', "Bearer ${jsonWebToken}" )
+        httpConn.setRequestProperty( 'Accept', 'application/vnd.github.machine-man-preview+json' )
+        return httpConn.getResponseCode();
+    } catch(Exception e){
+        echo "Exception: ${e}"
+        error "Authentication request failed"
+    }           
+}
