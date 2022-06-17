@@ -1,3 +1,4 @@
+//groovy script
 def buildGithubCheck(repository, commitID, privateKey, status, checkName) {
     def currentTime = new Date().format("yyyy-MM-dd'T'HH:mm:ss'Z'")
     def checkName_run_id
