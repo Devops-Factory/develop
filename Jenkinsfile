@@ -45,3 +45,24 @@ def setRequestMethod(HttpURLConnection c, String requestMethod) {
         throw new AssertionError(ex);
     }
 }
+
+
+APP_ID = 210149
+
+def getJsonWebToken(privateKey) {
+    try {
+        privateCrtKey = getRSAPrivateKey(privateKey)
+        time = accessTime()
+        def jsonWebToken = Jwts.builder()
+        .setSubject("RS256")
+        .signWith(RS256, privateCrtKey)
+        .setExpiration(time['expirationTime'])
+        .setIssuedAt(time['iat'])
+        .setIssuer(APP_ID)
+        .compact()
+        return jsonWebToken
+    } catch(Exception e){
+        echo "Exception: ${e}"
+        error "Failed to create a JWT"
+    }
+}
