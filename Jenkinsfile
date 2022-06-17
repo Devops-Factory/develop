@@ -27,25 +27,6 @@ def buildGithubCheck(repository, commitID, privateKey, status, checkName) {
     }
 }
 
-// Custom HTTP request method
-def setRequestMethod(HttpURLConnection c, String requestMethod) {
-    try {
-        final Object target;
-        if (c instanceof HttpsURLConnectionImpl) {
-            final Field delegate = HttpsURLConnectionImpl.class.getDeclaredField("delegate");
-            delegate.setAccessible(true);
-            target = delegate.get(c);
-        } else {
-            target = c;
-        }
-        final Field f = HttpURLConnection.class.getDeclaredField("method");
-        f.setAccessible(true);
-        f.set(target, requestMethod);
-    } catch (IllegalAccessException | NoSuchFieldException ex) {
-        throw new AssertionError(ex);
-    }
-}
-
 
 APP_ID = 210149
 
