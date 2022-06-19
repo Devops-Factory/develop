@@ -12,7 +12,7 @@ podTemplate(containers: [
         args: '30d')
   ]) {
 
-    node(POD_LABEL) {
+    node(kubernetes-kind) {
         stage('Get a Maven project') {
             git 'https://github.com/spring-projects/spring-petclinic.git'
             container('maven') {
