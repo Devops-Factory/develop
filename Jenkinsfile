@@ -1,31 +1,39 @@
-pipeline {
-  agent {
-    kubernetes {
-      yaml '''
-        apiVersion: v1
-        kind: Pod
-        spec:
-          containers:
-          - name: maven
-            image: maven:alpine
-            resources:
-              limits:
-                cpu: "1"
-              requests:
-                cpu: "0.5"
-            command:
-            - cat
-            tty: true
-        '''
-    }
-  }
-  stages {
-    stage('Run maven') {
-      steps {
-        container('maven') {
-          sh 'mvn -version'
+podTemplate(containers: [
+    containerTemplate(
+        name: 'maven', 
+        image: 'maven:3.8.1-jdk-8', 
+        command: 'sleep', 
+        args: '30d'
+        ),
+    containerTemplate(
+        name: 'python', 
+        image: 'python:latest', 
+        command: 'sleep', 
+        args: '30d')
+  ]) {
+
+    node(kubernetes-kind) {
+        stage('Get a Maven project') {
+            git 'https://github.com/spring-projects/spring-petclinic.git'
+            container('maven') {
+                stage('Build a Maven project') {
+                    sh '''
+                    echo "maven build"
+                    '''
+                }
+            }
         }
-      }
+
+        stage('Get a Python Project') {
+            git url: 'https://github.com/hashicorp/terraform.git', branch: 'main'
+            container('python') {
+                stage('Build a Go project') {
+                    sh '''
+                    echo "Go Build"
+                    '''
+                }
+            }
+        }
+
     }
-  }
 }
