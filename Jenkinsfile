@@ -1,3 +1,5 @@
+import jenkins.model.*
+    
 podTemplate(containers: [
     containerTemplate(
         name: 'maven', 
