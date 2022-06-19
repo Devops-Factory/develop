@@ -5,13 +5,14 @@ pipeline {
         apiVersion: v1
         kind: Pod
         spec:
-          limits:
-          - defaultRequest:
-              cpu: 100m
-            type: Container
           containers:
           - name: maven
             image: maven:alpine
+            resources:
+              limits:
+                cpu: "1"
+              requests:
+                cpu: "0.5"
             command:
             - cat
             tty: true
